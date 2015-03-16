@@ -1,0 +1,22 @@
+###############
+#  temp files #
+###############
+*.o
+*.tmp
+*.ini
+*.log
+app/gpio/gpio
+app/mbox/mbox
+lib/slib/libdebug.a
+lib/slib/libdisplay.a
+lib/slib/libframebuf.a
+lib/slib/libgpio.a
+lib/slib/libi2c.a
+lib/slib/libmsg.a
+lib/slib/librtc.a
+lib/slib/libserialcom.a
+lib/slib/libtemperature.a
+
+###############
+#    floder   #
+###############

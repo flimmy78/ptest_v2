@@ -1,0 +1,15 @@
+prefix=/usr/share/bluetooth
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+system_bus_default_address=unix:path=/usr/share/bluetooth/var/run/dbus/system_bus_socket
+sysconfdir=/usr/share/bluetooth/etc
+session_bus_services_dir=/usr/share/bluetooth/share/dbus-1/services
+daemondir=/usr/share/bluetooth/bin
+
+Name: dbus
+Description: Free desktop message bus
+Version: 1.2.26
+Libs: -L${libdir} -ldbus-1 -lpthread -lrt 
+Cflags: -I${includedir}/dbus-1.0 -I${libdir}/dbus-1.0/include
+

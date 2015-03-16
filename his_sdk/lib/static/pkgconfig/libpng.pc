@@ -1,0 +1,10 @@
+prefix=/home/lizz/work/his3718/HiSTBLinuxV100R002C01SPC020/source/msp/api/png/release
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/libpng14
+
+Name: libpng
+Description: Loads and saves PNG files
+Version: 1.4.0
+Libs: -L${libdir} -lpng14
+Cflags: -I${includedir}
