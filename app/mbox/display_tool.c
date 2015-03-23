@@ -211,9 +211,9 @@ void series_display(void)
     unsigned char data[100];
 
     memset(data, 0, 100);
-    sprintf(data, "hello COM2 send");
+    sprintf(data, "hello COM3 send");
 
-    fd_ser = InitSerialCom(2, 115200, 'n', 1, 8);
+    fd_ser = InitSerialCom(3, 115200, 'n', 1, 8);
     SerialSend(fd_ser, data, 5);
 
     FT.RGB.a = 255;
