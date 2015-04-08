@@ -23,6 +23,8 @@
 #define GPIO_NUMBER_PWR       135
 #define GPIO_NUMBER_RB_SHUT    44
 #define GPIO_NUMBER_RB_RESET   134
+#define GPIO_NUMBER_PSE_CON   64
+#define GPIO_NUMBER_OCP_STA   108
 
 #define GPIO_NAME_SATA      "sata"
 #define GPIO_NAME_SYS       "sys"
@@ -39,6 +41,8 @@
 #define GPIO_NAME_PWR       "pwr"
 #define GPIO_NAME_RB_SHUT   "rb_shut"
 #define GPIO_NAME_RB_RESET  "rb_reset"
+#define GPIO_NAME_PSE_CON   "pse_con"
+#define GPIO_NAME_OCP_STA   "ocp_sta"
 
 #define GPIO_R      0x01
 #define GPIO_W      0x02
@@ -67,6 +71,8 @@ static struct gpio GPIO[] = {
     GPIO_INIT(GPIO_NAME_PWR,  GPIO_NUMBER_PWR,  GPIO_W),
     GPIO_INIT(GPIO_NAME_RB_SHUT,  GPIO_NUMBER_RB_SHUT,  GPIO_W),
     GPIO_INIT(GPIO_NAME_RB_RESET,  GPIO_NUMBER_RB_RESET,  GPIO_W),
+    GPIO_INIT(GPIO_NAME_PSE_CON,  GPIO_NUMBER_PSE_CON,  GPIO_W),
+    GPIO_INIT(GPIO_NAME_OCP_STA,  GPIO_NUMBER_OCP_STA,  GPIO_R),
 };
 
 #define ASIZE(x)    (sizeof(x)/sizeof((x)[0]))
