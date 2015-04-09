@@ -213,7 +213,7 @@ void series_display(void)
     memset(data, 0, 100);
     sprintf(data, "hello COM3 send");
 
-    fd_ser = InitSerialCom(3, 115200, 'n', 1, 8);
+    fd_ser = InitSerialCom(4, 115200, 'n', 1, 8);
     SerialSend(fd_ser, data, 5);
 
     FT.RGB.a = 255;
