@@ -28,10 +28,10 @@ static void read_rtc_and_config_date(unsigned char *pData)
 	year = ((year_data >> 4) & 0xf) * 10 + (year_data & 0xf);
 
 	memset(Cmd, 0, 128);
-    /*
+
     sprintf(Cmd, "date %c%04d-%02d-%02d %02d:%02d:%02d%c", fen, year+2000, month, date,
         	hour, min, sec, fen);
-    */
+
 	system(Cmd);
 
     return ;
@@ -60,8 +60,15 @@ int get_time_info_string(char *pdata)
     month_data = p->tm_mon;
     year_data  = p->tm_year+1900;
 
+
+    printf("for test\r\n");
+
     sprintf(pdata, "%4d-%02d-%02d %02d:%02d:%02d", year_data, month_data, date_data, hour_data, minute_data, second_data);
 
+    if (year_data < 2014)
+    {
+        return 0;
+    }
 
     return 1;
 }
@@ -169,9 +176,40 @@ int sync_time_from_rtc(void)
         return 0;
     }
 
-    read_rtc_and_config_date(data);
+    //read_rtc_and_config_date(data);
     close_i2c_module();
 
+    return 1;
+}
+
+
+int get_current_time_string(char *pdata)
+{
+    time_t timep = 0;
+    struct tm *p;
+
+    unsigned char second_data, minute_data, hour_data;
+    unsigned char day, date_data, month_data;
+    int year_data;
+
+    int ret;
+
+    time(&timep);
+    p = localtime(&timep);
+
+    p->tm_mon += 1;
+    second_data = p->tm_sec;
+    minute_data = p->tm_min;
+    hour_data = p->tm_hour;
+
+    date_data  = p->tm_mday;
+    month_data = p->tm_mon;
+    year_data  = p->tm_year+1900;
+
+
+
+    sprintf(pdata, "RTC|%4d-%02d-%02d %02d:%02d:%02d", year_data, month_data, date_data, hour_data, minute_data, second_data);
+    printf("%s\n", pdata);
     return 1;
 }
 
