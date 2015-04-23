@@ -49,6 +49,8 @@ extern "C" {
 
 #include "debug_public.h"
 
+//#define SYSTEM_TEST_SUPPORT 1
+
 #define MAX_DISP_CHAR 1024
 
 typedef enum {
@@ -77,8 +79,31 @@ typedef enum {
 
     CONFIRM_SERIES,
 
+    USB_OK,
+    USB_FAILED,
+
+    SERIES2_FAILED,
+    SERIES2_OK,
+
+    GPIO_PUTDOWN,
+
+    GPIO_TEST,
+
+    MUTE_MIC_TEST,
     MAX_DISP_CHARACTER
 }DISP_CHARACTER;
+
+#define usb_ok 0x01
+#define msata_ok 0x02
+#define sdcard_ok 0x04
+#define temperature_failure 0x08
+#define rtc_failure 0x10
+#define audio_ok 0x20
+#define gpio_test 0x40
+
+void set_test_status(unsigned int flag);
+void save_test_status(void);
+void set_audio_failure(void);
 
 #ifdef __cplusplus
 }

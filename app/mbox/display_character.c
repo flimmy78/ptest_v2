@@ -3,7 +3,7 @@
 
 static char display_char[MAX_DISP_CHARACTER][MAX_DISP_CHAR] = {
 
-    {"请连接好线缆，按回车键开始测试"},
+    {"请连接好线缆，开始测试"},
 
     {"请输入网口工位号0~90:"},
 
@@ -27,7 +27,17 @@ static char display_char[MAX_DISP_CHARACTER][MAX_DISP_CHAR] = {
 
     {"看串口上是否有输出，按回车键继续"},
 
-    //{"  "},
+    {"usb测试成功"},
+    {"usb测试失败"},
+
+    {"串口测试没有通过"},
+    {"串口测试已经通过"},
+
+    {"请按GPIO"},
+    {"GPIO已经测试"},
+
+    {"请不要对mic说话"}
+
 };
 
 int display_character_into_screen(DISP_CHARACTER type,

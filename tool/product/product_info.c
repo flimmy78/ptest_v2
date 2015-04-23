@@ -23,6 +23,7 @@ int get_pcba_mac(char *mac, int length)
     rfp = fopen("/tmp/mac.ini", "rb");
     if (rfp == NULL)
     {
+        printf("\nmac read failure\n");
         return 0;
     }
 
@@ -55,6 +56,7 @@ int get_pcba_sn(char *sn, int length)
     rfp = fopen("/tmp/sn.ini", "rb");
     if (rfp == NULL)
     {
+        printf("\nsn read failure\n");
         return 0;
     }
 

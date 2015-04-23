@@ -2,25 +2,32 @@
 #include "gpio_public.h"
 
 static int bSharp = 1;
-static int gpio40_value = 0;
-static int gpio41_value = 0;
-static int gpio44_value = 0;
+static int gpio_reset = 0;
+static int gpio_sata = 0;
+static int gpio_sys = 0;
 static struct timeval record_tm;
+static struct timeval gpio_force_exit_tm;
+static int bgpio_quit = 0;
 
 int init_gpio_borad(void)
 {
 
-    //read_gpio_status(44, &gpio44_value);
-    write_gpio_status(44, &gpio44_value);
+    //read_gpio_status(59, &gpio_reset);
+    write_gpio_status(59, &gpio_reset);
 
-    write_gpio_status(40, gpio40_value);
-    write_gpio_status(41, gpio41_value);
+    write_gpio_status(58, gpio_sata);
+    write_gpio_status(57, gpio_sys);
 
     gettimeofday(&(record_tm), NULL);
+    gettimeofday(&(gpio_force_exit_tm), NULL);
 
     return 0;
 }
 
+int get_force_exit_gpio(void)
+{
+    return bgpio_quit;
+}
 
 int gpio_sharp_filter(void)
 {
@@ -30,31 +37,40 @@ int gpio_sharp_filter(void)
 
     gettimeofday(&cur_tm, NULL);
 
+    if (bgpio_quit == 0)
+    {
+        distms = ((cur_tm.tv_sec*1000+(cur_tm.tv_usec)/1000)-(gpio_force_exit_tm.tv_sec*1000+(gpio_force_exit_tm.tv_usec)/1000));
+        if (distms >= 90*1000)
+        {
+            bgpio_quit = 1;
+        }
+    }
+
     distms = ((cur_tm.tv_sec*1000+(cur_tm.tv_usec)/1000)-(record_tm.tv_sec*1000+(record_tm.tv_usec)/1000));
-    if (distms >= 5*1000)
+    if (distms >= 200)
     {
         if (bSharp)
         {
-            write_gpio_status(40, gpio40_value);
-            write_gpio_status(41, gpio41_value);
+            write_gpio_status(58, gpio_sata);
+            write_gpio_status(57, gpio_sys);
 
-            //M_TRACE(DEBUG_TRACE, SYS_MODE, "gpio40 = %d, gpio41 = %d\n", gpio40_value, gpio41_value);
-            if (gpio40_value == 0)
+            //M_TRACE(DEBUG_TRACE, SYS_MODE, "gpio_sata = %d, gpio_sys = %d\n", gpio_sata, gpio_sys);
+            if (gpio_sata == 0)
             {
-                gpio40_value = 1;
+                gpio_sata = 1;
             }
             else
             {
-                gpio40_value = 0;
+                gpio_sata = 0;
             }
 
-            if (gpio41_value == 0)
+            if (gpio_sys == 0)
             {
-                gpio41_value = 1;
+                gpio_sys = 1;
             }
             else
             {
-                gpio41_value = 0;
+                gpio_sys = 0;
             }
 
         }
@@ -63,16 +79,17 @@ int gpio_sharp_filter(void)
         return 1;
     }
 
-    ret = read_gpio_status(44, &gpio44_value);
-    if (ret)
+    ret = read_gpio_status(59, &gpio_reset);
+    //if (ret)
     {
-        if (gpio44_value == 0)
+        if (gpio_reset == 0)
         {
-            bSharp = 1;
+            set_test_status(gpio_test);
+            bSharp = 0;
         }
         else
         {
-            bSharp = 0;
+            bSharp = 1;
         }
     }
 

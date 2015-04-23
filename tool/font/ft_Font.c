@@ -304,12 +304,14 @@ int ft_Font_Init(void)
     ft_MEM.cost_mem_width = 0;
     ft_MEM.disp_mem_height = 0;
     ft_MEM.disp_mem_width = 0;
-    ft_MEM.pmem = malloc(1280*100*2);
+    ft_MEM.pmem = malloc(1280*400*4);
 
     ft_MEM_SLV.cost_mem_width = 0;
     ft_MEM_SLV.disp_mem_height = 0;
     ft_MEM_SLV.disp_mem_width = 0;
-    ft_MEM_SLV.pmem = malloc(1280*100*2);
+    ft_MEM_SLV.pmem = malloc(1280*400*4);
+
+    printf("fontfinish\n");
 
     return _FT_FONT_SUCC;
 }
