@@ -18,7 +18,7 @@ int get_pcba_mac(char *mac, int length)
 {
     FILE *rfp = NULL;
 
-    system("bootm pcba.mac > /tmp/mac.ini");
+    system("atenv infos/product/mac > /tmp/mac.ini");
 
     rfp = fopen("/tmp/mac.ini", "rb");
     if (rfp == NULL)
@@ -51,7 +51,7 @@ int get_pcba_sn(char *sn, int length)
 {
     FILE *rfp = NULL;
 
-    system("bootm pcba.sn > /tmp/sn.ini");
+    system("atenv infos/product/sn > /tmp/sn.ini");
 
     rfp = fopen("/tmp/sn.ini", "rb");
     if (rfp == NULL)
@@ -62,6 +62,26 @@ int get_pcba_sn(char *sn, int length)
 
     length = fread(sn, 1, 26, rfp);
     M_TRACE(DEBUG_TRACE, SYS_MODE, "sn=%s,%d\n", sn, length);
+    fclose(rfp);
+
+    return length;
+}
+
+int get_pcba_iccid(char *iccid, int length)
+{
+    FILE *rfp = NULL;
+
+    //system("bootm pcba.iccid > /tmp/iccid.ini");
+
+    rfp = fopen("/tmp/.3g/iccid", "rb");
+    if (rfp == NULL)
+    {
+        printf("\niccid read failure\n");
+        return 0;
+    }
+
+    length = fread(iccid, 1, 26, rfp);
+    M_TRACE(DEBUG_TRACE, SYS_MODE, "iccid=%s,%d\n", iccid, length);
     fclose(rfp);
 
     return length;

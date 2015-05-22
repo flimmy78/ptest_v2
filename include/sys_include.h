@@ -70,6 +70,16 @@ typedef enum {
     MSATA_OK,
     MSATA_FAILED,
 
+	register_OK,
+	register_FAILED,
+
+	gps_OK,
+	gps_FAILED,
+
+	voltage_OK,
+	voltage_FAILED_L,
+	voltage_FAILED_H,
+
     TFCARD_OK,
     TFCARD_FAILED,
 

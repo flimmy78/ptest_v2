@@ -19,6 +19,16 @@ static char display_char[MAX_DISP_CHARACTER][MAX_DISP_CHAR] = {
     {"硬盘测试成功"},
     {"硬盘测试失败"},
 
+    {"注册成功"},
+    {"注册失败"},
+
+    {"GPS模块测试成功"},
+    {"超时,GPS定位失败"},
+
+	{"电压测试正常"},
+	{"电压值偏低"},
+	{"电压值偏高"},
+	
     {"tfcard测试成功"},
     {"tfcard测试失败"},
 

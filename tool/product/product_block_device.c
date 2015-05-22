@@ -88,11 +88,12 @@ int confirm_msata_running(void)
 
     for (i = 0; i < 5; i++)
     {
-        system("mount -t ext4 /dev/sda1 /mnt/sda | mount -t ext4 /dev/sda /mnt/sda");
+		system("mkdir -p /mnt/hd");
+		system("mount -t ext4 /dev/sda1 /mnt/hd | mount -t ext4 /dev/sda /mnt/hd");
 
         usleep(500*1000);
 
-        if (access("/mnt/sda/website/index.html", F_OK) == 0)
+        if (access("/mnt/hd/website/index.html", F_OK) == 0)
         {
             printf("\nmsata success\n");
             set_test_status(msata_ok);
@@ -103,6 +104,50 @@ int confirm_msata_running(void)
     }
 
     printf("\nmsata failure\n");
+    return 0;
+}
+
+int confirm_register(void)
+{
+    int i;
+	
+		i = system("cat /tmp/registerResult.txt | awk -F ':' '{print $2}'| awk -F '}' '{print $1}'");
+
+        usleep(500*1000);
+
+        if (i == 0)
+        {
+            printf("\register success\n");
+            set_test_status(usb_ok);
+            return 1;
+        }
+
+        usleep(1000*1000);
+    
+
+    printf("\register failure\n");
+    return 0;
+}
+
+int confirm_gps(void)
+{
+    int i;
+	
+		i = system("cat /mnt/usb/gps_test.txt");
+
+        usleep(500*1000);
+
+        if (i == 1)
+        {
+            printf("\gps success\n");
+            set_test_status(usb_ok);
+            return 1;
+        }
+
+        usleep(1000*1000);
+    
+
+    printf("\gps failure\n");
     return 0;
 }
 

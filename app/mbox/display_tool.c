@@ -11,20 +11,29 @@
 #define ser_pos_x  520
 #define ser_pos_y  305
 
+#define voltage_pos_x 520
+#define voltage_pos_y 345
+
 #define msata_pos_x 520
-#define msata_pos_y 345
+#define msata_pos_y 385
 
 #define tfc_pos_x  520
-#define tfc_pos_y  385
+#define tfc_pos_y  545
 
 #define usb_pos_x  520
-#define usb_pos_y  425
+#define usb_pos_y  585
+
+#define register_pos_x 520
+#define register_pos_y 425
 
 #define gpio_pos_x 520
 #define gpio_pos_y 465
 
+#define gps_pos_x 520
+#define gps_pos_y 505
+
 #define play_pos_x 520
-#define play_pos_y 505
+#define play_pos_y 545
 
 void prepare_bg(void)
 {
@@ -349,7 +358,7 @@ void ai_display_filter(int flag)
         {
             //printf("aaaaaaaaaaaaaaaaaaaa\n");
             memset(data, 0, 32);
-            sprintf(data, "mic输入ok");
+            sprintf(data, "LINE输入ok");
             Pos.x = 590;
             Pos.y = 130;
             FT.RGB.a = 255;
@@ -364,7 +373,7 @@ void ai_display_filter(int flag)
             {
                 mic_ok_disp = 1;
 
-                printf("\nmic success\n");
+                printf("\nline success\n");
                 refresh_background_2_device(Pos, Region);
                 ft_Font_Str2Disp_return_region(data,
                     FT,
@@ -375,10 +384,10 @@ void ai_display_filter(int flag)
             }
         }
 
-        if (access("/tmp/leftai_ok", F_OK) == 0)
-        {
+       /*if (access("/tmp/leftai_ok", F_OK) == 0)
+	{
             memset(data, 0, 32);
-            sprintf(data, "LINE输入ok");
+            sprintf(data, "MIC输入ok");
             Pos.x = 840;
             Pos.y = 130;
             FT.RGB.a = 255;
@@ -392,7 +401,7 @@ void ai_display_filter(int flag)
             if (line_ok_disp == 0)
             {
                 line_ok_disp = 1;
-                printf("\nline success\n");
+                printf("\nmic success\n");
                 refresh_background_2_device(Pos, Region);
                 ft_Font_Str2Disp_return_region(data,
                     FT,
@@ -400,7 +409,7 @@ void ai_display_filter(int flag)
                     35,
                     &Region);
             }
-        }
+        }*/
 
         ai_record_tm = cur_tm;
     }
@@ -438,13 +447,20 @@ void display_welcom(void)
     Region.h = 40;
 
     //refresh_background_2_device(Pos, Region);
-    ft_Font_Str2Disp_return_region("请输入mic",
+   /* ft_Font_Str2Disp_return_region("请输入mic",
+        FT,
+        Pos,
+        35,
+        &Region);*/
+
+
+    ft_Font_Str2Disp_return_region("输入linein",
         FT,
         Pos,
         35,
         &Region);
 
-    Pos.x = 840;
+	Pos.x = 590;
     Pos.y = 130;
     FT.RGB.a = 255;
     FT.RGB.r = 255;
@@ -453,12 +469,6 @@ void display_welcom(void)
     Region.x = Region.y = 0;
     Region.w = 200;
     Region.h = 40;
-
-    ft_Font_Str2Disp_return_region("输入linein",
-        FT,
-        Pos,
-        35,
-        &Region);
 
 }
 
@@ -479,9 +489,9 @@ void mute_ai_display(void)
     Pos.x = mute_pos_x;
     Pos.y = mute_pos_y;
 
-    display_character_into_screen(MUTE_MIC_TEST,
+   /* display_character_into_screen(MUTE_MIC_TEST,
         FT,
-        &Pos, &Region);
+        &Pos, &Region);*/
 
 
     return ;
@@ -695,6 +705,7 @@ void display_stb_info(void)
 {
     char stb_id[64];
     char mac_id[64];
+	char iccid[64];
 
     Pixel64 FT;
 
@@ -709,6 +720,7 @@ void display_stb_info(void)
 
     get_pcba_mac(mac_id, 64);
     get_pcba_sn(stb_id, 64);
+	get_pcba_iccid(iccid,64);
     //sprintf(stb_id, "0100000000000001");
     //sprintf(mac_id, "01:23:45:67:89:00");
 
@@ -776,6 +788,44 @@ void display_stb_info(void)
     }
     Pos.x = 50;
     Pos.y = 220;
+
+    Region.x = Region.y = 0;
+    Region.w = 400;
+    Region.h = 35;
+    refresh_background_2_device(Pos, Region);
+
+    //sprintf(data, "MAC:%s", mac_id);
+    ft_Font_Str2Disp_return_region(data,
+            FT,
+            Pos,
+            35,
+            &Region);
+
+	if (strlen(iccid) < 21)
+    {
+        FT.RGB.a = 255;
+        FT.RGB.r = 255;
+        FT.RGB.g = 0;
+        FT.RGB.b = 0;
+
+        sprintf(data, "ICCID:NULL");
+
+        printf("\niccid read failure\n");
+    }
+    else
+    {
+        FT.RGB.a = 255;
+        FT.RGB.r = 255;
+        FT.RGB.g = 255;
+        FT.RGB.b = 255;
+
+        sprintf(data, "ICCID:%s", iccid);
+
+        printf("\niccid read ok |%s\n", iccid);
+
+    }
+    Pos.x = 50;
+    Pos.y = 270;
 
     Region.x = Region.y = 0;
     Region.w = 400;
@@ -858,3 +908,201 @@ void display_gpio_test(void)
         &Pos, &Region);
 
 }
+
+void display_register(void)
+{
+    Pixel64 FT;
+
+    GrPos Pos;
+    GrRegion Region;
+    int ret;
+
+    ret = 1;
+    Pos.x = register_pos_x;
+    Pos.y = register_pos_y;
+    FT.RGB.a = 255;
+    FT.RGB.r = 255;
+    FT.RGB.g = 255;
+    FT.RGB.b = 255;
+
+	FILE *pf = popen("cat /tmp/registerResult.txt | awk -F ':' '{print $2}'| awk -F '}' '{print $1}'","r");
+	char res[16]={0};
+	fread(res, 16 , 1,pf);
+	ret = atoi(res);
+    //ret = confirm_register();
+    if (ret == 0)
+    {
+        display_character_into_screen(register_OK,
+            FT,
+            &Pos, &Region);
+    }
+    else
+    {
+        FT.RGB.a = 255;
+        FT.RGB.r = 255;
+        FT.RGB.g = 0;
+        FT.RGB.b = 0;
+
+        display_character_into_screen(register_FAILED,
+            FT,
+            &Pos, &Region);
+    }
+	pclose(pf);
+}
+
+void display_gps(void)
+{
+    Pixel64 FT;
+
+    GrPos Pos;
+    GrRegion Region;
+    int ret,timing;
+	
+	char res[16] = {0};
+	char longitude[16]={0};
+	char latitude[16]={0};
+
+    //ret = 1;
+    Pos.x = gps_pos_x;
+    Pos.y = gps_pos_y;
+    FT.RGB.a = 255;
+    FT.RGB.r = 255;
+    FT.RGB.g = 255;
+    FT.RGB.b = 255;
+
+	for(timing = 1;timing <= 12;timing++)
+	{
+		//ret = confirm_gps();
+		FILE *pf = popen("cat /tmp/.gps/status","r");
+		
+		fread(res,16,1,pf);
+		ret = atoi(res);
+		printf("ret=%d",ret);
+    	if (ret == 1)
+    	{
+			FILE *p_Lng=popen("cat /tmp/.gps/gps_Lng","r");
+			fread(longitude,16,1,p_Lng);
+
+			FILE *p_Lat=popen("cat /tmp/.gps/gps_Lat","r");
+			fread(latitude,16,1,p_Lat);
+			
+			display_character_into_screen(gps_OK,
+            	FT,
+            	&Pos, &Region);
+
+			Pos.x = 800;
+			ft_Font_Str2Disp_return_region(longitude,
+            	FT,
+            	Pos,
+            	35,
+            	&Region);
+
+			Pos.x = 1050;
+			ft_Font_Str2Disp_return_region(latitude,
+            	FT,
+            	Pos,
+            	35,
+            	&Region);
+			
+			pclose(p_Lng);
+			pclose(p_Lat);
+			break;
+    	}
+    	else
+    	{       	
+			if(timing = 12)
+			{
+				FT.RGB.a = 255;
+    			FT.RGB.r = 255;
+    			FT.RGB.g = 0;
+    			FT.RGB.b = 0;
+
+    			display_character_into_screen(gps_FAILED,
+        			FT,
+        			&Pos, &Region);
+				break;
+			}
+		
+		}
+		
+		sleep(500*1000);
+		pclose(pf);
+		printf("%d\n",timing);
+	}
+	
+}
+
+void display_voltage(void)             //电压测试
+{
+	Pixel64 FT;
+    GrPos Pos;
+    GrRegion Region;
+
+    Pos.x = voltage_pos_x;
+    Pos.y = voltage_pos_y;
+    FT.RGB.a = 255;
+    FT.RGB.r = 255;
+    FT.RGB.g = 255;
+    FT.RGB.b = 255;
+
+    float voltage;
+    FILE *pf = popen("voltage_show | awk -F ':' '{print $2}'","r");
+    char res[32]={0};
+	fread(res,32,1,pf);
+	voltage=atof(res);
+	printf("%f",voltage);    
+
+	if((voltage > 23.7 & voltage <24.3)||(voltage > 11.7 & voltage < 12.3) )
+	{
+		display_character_into_screen(voltage_OK,
+            FT,
+            &Pos, &Region);	                                              //电压正常
+		Pos.x = 750;
+		ft_Font_Str2Disp_return_region(res,
+            FT,
+            Pos,
+            35,
+            &Region);
+	}
+	else
+	{
+		if(voltage <23.7 || voltage < 11.7 )
+		{
+			FT.RGB.a = 255;
+    		FT.RGB.r = 255;
+    		FT.RGB.g = 0;
+    		FT.RGB.b = 0;
+
+			display_character_into_screen(voltage_FAILED_L,
+            	FT,
+            	&Pos, &Region);                                           //电压偏小
+			Pos.x = 750;
+		ft_Font_Str2Disp_return_region(res,
+            FT,
+            Pos,
+            35,
+            &Region);
+		}
+		else
+		{
+			FT.RGB.a = 255;
+    		FT.RGB.r = 255;
+    		FT.RGB.g = 0;
+    		FT.RGB.b = 0;
+
+			display_character_into_screen(voltage_FAILED_H,
+            	FT,
+            	&Pos, &Region);                                            //电压偏高
+			Pos.x = 750;
+		ft_Font_Str2Disp_return_region(res,
+            FT,
+            Pos,
+            35,
+            &Region);
+		}
+	}
+	pclose(pf);
+}
+
+//    getchar();
+

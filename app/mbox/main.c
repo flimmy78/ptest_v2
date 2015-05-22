@@ -10,13 +10,13 @@ static unsigned int test_flag = 0;
 
 static char stb_id[64];
 static char mac_id[64];
+static char iccid[64];
 
 static int init_hard_device_task(void);
 static int fd_ser = -1;
 static void exit_timer(void);
 static void begin_record(void);
 
-/*
 static int send_data_2_network(void)
 {
     udp_item_def Handle;
@@ -41,7 +41,7 @@ static int send_data_2_network(void)
     close_udp_instance(&Handle);
     return 1;
 }
-*/
+
 static int get_system_time(void)
 {
     udp_item_def Handle;
@@ -158,8 +158,18 @@ int main( int argc, char **argv )
     usleep(500*1000);
 #endif
 
+	display_voltage();
+	usleep(500*1000);
+
     display_msata();
     usleep(500*1000);
+
+	display_register();
+	usleep(500*1000);
+
+	
+
+
 /*
     display_tfcard();
     usleep(500*1000);
@@ -169,6 +179,7 @@ int main( int argc, char **argv )
 #endif
 */
     exit_timer();
+ 
     while(1)
     {
         if (test_flag & gpio_test)
@@ -187,14 +198,17 @@ int main( int argc, char **argv )
             printf("\nGPIO failure\n");
             break;
         }
-        usleep(1000*1000);
+        usleep(100*1000);
     }
-
     begin_record();
+
+	display_gps();
+	usleep(500*1000);
+	
 #ifndef SYSTEM_TEST_SUPPORT
     save_test_status();
 #endif
-    usleep(500*1000);
+    usleep(500*10000);
     printf("\nvideo play\n");
     display_player();
 
