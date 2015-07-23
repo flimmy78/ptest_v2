@@ -728,7 +728,7 @@ void display_stb_info(void)
     Pos.x = 50;
     Pos.y = 170;
 
-    if (strlen(stb_id) < 21)
+    if (strlen(stb_id) < 20)
     {
         FT.RGB.a = 255;
         FT.RGB.r = 255;
@@ -926,11 +926,16 @@ void display_register(void)
     FT.RGB.b = 255;
 
 	FILE *pf = popen("cat /tmp/registerResult.txt | awk -F ':' '{print $2}'| awk -F '}' '{print $1}'","r");
-	char res[16]={0};
-	fread(res, 16 , 1,pf);
-	ret = atoi(res);
+	//FILE *fp,*pf = popen("cat /tmp/registerResult.txt | jq -j '.code'","r");
+	char res[32]={0};
+	fread(res, 32 , 1,pf);
+	if(res[0]==0)
+		ret=-1;
+	else
+		ret = atoi(res);
     //ret = confirm_register();
-    if (ret == 0)
+
+    if ( (access("/tmp/registerResult.txt",F_OK))!=-1 && ret == 0)
     {
         display_character_into_screen(register_OK,
             FT,
