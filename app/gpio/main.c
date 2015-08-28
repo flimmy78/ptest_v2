@@ -24,6 +24,7 @@
 #define GPIO_NUMBER_RB_SHUT    44
 #define GPIO_NUMBER_RB_RESET   134
 #define GPIO_NUMBER_PSE_CON   64
+#define GPIO_NUMBER_PSE_CON1  60
 #define GPIO_NUMBER_OCP_STA   108
 
 #define GPIO_NAME_SATA      "sata"
@@ -42,6 +43,7 @@
 #define GPIO_NAME_RB_SHUT   "rb_shut"
 #define GPIO_NAME_RB_RESET  "rb_reset"
 #define GPIO_NAME_PSE_CON   "pse_con"
+#define GPIO_NAME_PSE_CON1   "pse_con1"
 #define GPIO_NAME_OCP_STA   "ocp_sta"
 
 #define GPIO_R      0x01
@@ -72,6 +74,7 @@ static struct gpio GPIO[] = {
     GPIO_INIT(GPIO_NAME_RB_SHUT,  GPIO_NUMBER_RB_SHUT,  GPIO_W),
     GPIO_INIT(GPIO_NAME_RB_RESET,  GPIO_NUMBER_RB_RESET,  GPIO_W),
     GPIO_INIT(GPIO_NAME_PSE_CON,  GPIO_NUMBER_PSE_CON,  GPIO_W),
+    GPIO_INIT(GPIO_NAME_PSE_CON1,  GPIO_NUMBER_PSE_CON1,  GPIO_W),
     GPIO_INIT(GPIO_NAME_OCP_STA,  GPIO_NUMBER_OCP_STA,  GPIO_R),
 };
 
